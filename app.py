@@ -1,14 +1,40 @@
-# app.py
-from flask import Flask, render_template, request, redirect, url_for, flash
+# app.py - CON PASSWORD
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from database import init_db, aggiungi_appuntamento, get_appuntamenti_giorno, get_appuntamenti_settimana
-from datetime import datetime, timedelta  # timedelta necessario nei template
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
-app.secret_key = 'supersecretkey'
+app.secret_key = 'supersecretkey_agenda_online'
 
-# Inizializza il DB al primo avvio
+# === PASSWORD DI ACCESSO (CAMBIALA!) ===
+PASSWORD = "Eternoagenda73#"  # ← CAMBIA CON UNA TUA!
+
+# Inizializza DB
 init_db()
 
+# === LOGIN OBBLIGATORIO ===
+@app.before_request
+def require_login():
+    if request.path not in ['/login', '/static/style.css'] and not session.get('logged_in'):
+        return redirect(url_for('login'))
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        if request.form['password'] == PASSWORD:
+            session['logged_in'] = True
+            return redirect(url_for('index'))
+        else:
+            flash("Password sbagliata!")
+    return '''
+    <form method="post" style="text-align:center;margin-top:100px;">
+        <h2>Agenda Personale</h2>
+        <input type="password" name="password" placeholder="Password" required style="padding:10px;font-size:18px;">
+        <button type="submit" style="padding:10px 20px;font-size:18px;margin-left:10px;">Accedi</button>
+    </form>
+    '''
+
+# === ROTTE (come prima) ===
 @app.route('/')
 def index():
     oggi = datetime.now().strftime('%Y-%m-%d')
@@ -21,14 +47,8 @@ def giorno(data):
     except:
         flash("Data non valida")
         return redirect(url_for('index'))
-
     appuntamenti = get_appuntamenti_giorno(data)
-    return render_template(
-        'giorno.html',
-        data=data_obj,
-        appuntamenti=appuntamenti,
-        timedelta=timedelta
-    )
+    return render_template('giorno.html', data=data_obj, appuntamenti=appuntamenti, timedelta=timedelta)
 
 @app.route('/settimana/<data>')
 def settimana(data):
@@ -41,23 +61,14 @@ def settimana(data):
 
     giorni = [(lunedi + timedelta(days=i)).date() for i in range(7)]
     appuntamenti = get_appuntamenti_settimana(lunedi.date(), (lunedi + timedelta(days=6)).date())
-    
-    # Inizializza dizionario: chiave = date, valore = lista appuntamenti
     appuntamenti_per_giorno = {g: [] for g in giorni}
-    
-    # CORREZIONE: converte app['data'] (stringa) in oggetto date
     for app in appuntamenti:
         data_app = datetime.strptime(app['data'], '%Y-%m-%d').date()
         if data_app in appuntamenti_per_giorno:
             appuntamenti_per_giorno[data_app].append(app)
 
-    return render_template(
-        'settimana.html',
-        lunedi=lunedi,
-        giorni=giorni,
-        appuntamenti_per_giorno=appuntamenti_per_giorno,
-        timedelta=timedelta
-    )
+    return render_template('settimana.html', lunedi=lunedi, giorni=giorni,
+                         appuntamenti_per_giorno=appuntamenti_per_giorno, timedelta=timedelta)
 
 @app.route('/aggiungi', methods=['POST'])
 def aggiungi():
