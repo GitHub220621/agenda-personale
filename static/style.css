@@ -1,0 +1,186 @@
+/* static/style.css */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 20px;
+    background: #f4f6f9;
+    color: #2c3e50;
+    line-height: 1.6;
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.nav {
+    text-align: center;
+    margin: 20px 0;
+    padding: 10px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.nav a {
+    margin: 0 15px;
+    text-decoration: none;
+    color: #3498db;
+    font-weight: bold;
+    font-size: 1.1em;
+    transition: color 0.3s;
+}
+
+.nav a:hover {
+    color: #2980b9;
+    text-decoration: underline;
+}
+
+.form-aggiungi {
+    background: #fff;
+    padding: 18px;
+    border-radius: 10px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    margin: 25px 0;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-aggiungi input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1em;
+    flex: 1;
+    min-width: 100px;
+}
+
+.form-aggiungi input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
+}
+
+.form-aggiungi button {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.form-aggiungi button:hover {
+    background: #219653;
+}
+
+.flash {
+    background: #d5f4e6;
+    color: #27ae60;
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    margin: 15px 0;
+    font-weight: 500;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.appuntamenti {
+    margin-top: 20px;
+}
+
+.appuntamento {
+    background: white;
+    padding: 14px;
+    margin: 10px 0;
+    border-left: 5px solid #3498db;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    transition: transform 0.2s;
+}
+
+.appuntamento:hover {
+    transform: translateY(-2px);
+}
+
+.appuntamento strong {
+    color: #2c3e50;
+    font-size: 1.1em;
+}
+
+.appuntamento em {
+    display: block;
+    margin-top: 6px;
+    color: #7f8c8d;
+    font-size: 0.95em;
+}
+
+.griglia-settimana {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.giorno-col {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 12px;
+    min-height: 200px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: all 0.2s;
+}
+
+.giorno-col:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transform: translateY(-3px);
+}
+
+.giorno-col h3 {
+    margin: 0 0 12px 0;
+    font-size: 0.9em;
+    color: #95a5a6;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.link-giorno {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.app-mini {
+    font-size: 0.85em;
+    padding: 6px 8px;
+    margin: 4px 0;
+    background: #ebf3fd;
+    border-left: 3px solid #3498db;
+    border-radius: 4px;
+    color: #2c3e50;
+}
+
+.app-mini strong {
+    font-weight: 600;
+}
+
+/* Responsive per schermi piccoli */
+@media (max-width: 768px) {
+    .griglia-settimana {
+        grid-template-columns: 1fr;
+    }
+    .form-aggiungi {
+        flex-direction: column;
+    }
+    .form-aggiungi input, .form-aggiungi button {
+        width: 100%;
+    }
+}

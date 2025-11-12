@@ -1,0 +1,20 @@
+# Cache Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Database locale (NON caricarlo su GitHub!)
+agenda.db
+
+# File di sistema
+.DS_Store
+Thumbs.db
+
+# Ambiente virtuale (non serve su Render)
+env/
+venv/
+.venv/
+
+# File sensibili
+.env

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Agenda - {{ data.strftime('%d/%m/%Y') }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+</head>
+<body>
+    <h1>Agenda del {{ data.strftime('%d %B %Y') }}</h1>
+
+    <div class="nav">
+        <a href="{{ url_for('giorno', data=(data - timedelta(days=1)).strftime('%Y-%m-%d')) }}">◀</a>
+        <a href="{{ url_for('index') }}">Oggi</a>
+        <a href="{{ url_for('giorno', data=(data + timedelta(days=1)).strftime('%Y-%m-%d')) }}">▶</a>
+        <a href="{{ url_for('settimana', data=data.strftime('%Y-%m-%d')) }}">Settimana</a>
+    </div>
+
+    <form method="POST" action="{{ url_for('aggiungi') }}" class="form-aggiungi">
+        <input type="hidden" name="data" value="{{ data.strftime('%Y-%m-%d') }}">
+        <input type="text" name="ora" placeholder="HH:MM" required pattern="([0-1]?[0-9]|2[0-3]):[0-5][0-9]" style="width:60px">
+        <input type="text" name="titolo" placeholder="Titolo" required maxlength="50">
+        <input type="text" name="descrizione" placeholder="Note (max 200)" maxlength="200">
+        <button type="submit">Aggiungi</button>
+    </form>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash">{{ messages[0] }}</div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="appuntamenti">
+        {% if appuntamenti %}
+            {% for app in appuntamenti %}
+            <div class="appuntamento">
+                <strong>{{ app.ora }}</strong> - {{ app.titolo }}
+                <em>{{ app.descrizione }}</em>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>Nessun appuntamento.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

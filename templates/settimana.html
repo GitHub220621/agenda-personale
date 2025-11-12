@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Settimana del {{ lunedi.strftime('%d/%m') }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <meta charset="utf-8">
+</head>
+<body>
+    <h1>Settimana dal {{ lunedi.strftime('%d/%m') }} al {{ (lunedi + timedelta(days=6)).strftime('%d/%m/%Y') }}</h1>
+
+    <div class="nav">
+        <a href="{{ url_for('settimana', data=(lunedi - timedelta(days=7)).strftime('%Y-%m-%d')) }}">◀</a>
+        <a href="{{ url_for('index') }}">Oggi</a>
+        <a href="{{ url_for('settimana', data=(lunedi + timedelta(days=7)).strftime('%Y-%m-%d')) }}">▶</a>
+        <a href="{{ url_for('giorno', data=lunedi.strftime('%Y-%m-%d')) }}">Giorno</a>
+    </div>
+
+    <div class="griglia-settimana">
+        {% for giorno in giorni %}
+        <div class="giorno-col">
+            <h3>{{ giorno.strftime('%A')[:3] }}<br>{{ giorno.strftime('%d/%m') }}</h3>
+            <a href="{{ url_for('giorno', data=giorno.strftime('%Y-%m-%d')) }}" class="link-giorno">
+                {% if appuntamenti_per_giorno[giorno] %}
+                    {% for app in appuntamenti_per_giorno[giorno] %}
+                    <div class="app-mini">
+                        <strong>{{ app.ora }}</strong> {{ app.titolo }}
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <em>-</em>
+                {% endif %}
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
